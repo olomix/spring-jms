@@ -34,4 +34,6 @@ Spring JMS
 	...
 
 Если запускается на разных машинах, то можно указать серверу и клинтам на какой IP:PORT коннектиться
+
 	java -jar target/spring-jms-1.0-SNAPSHOT.jar -client -brokerUrl ssl://localhost:61616
+
