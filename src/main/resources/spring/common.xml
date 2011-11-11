@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://activemq.apache.org/schema/core 
+						http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+	<bean id="mappings"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties">
+			<value>
+				broker.url=ssl://localhost:61616
+				jms.queue.request=queue.request
+				jms.queue.response=queue.response
+				server.test_messages.num=10
+			</value>
+		</property>
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+	
+	<amq:queue id="requestDestination" physicalName="${jms.queue.request}" />
+	<amq:queue id="responseDestination" physicalName="${jms.queue.response}" />
+
+	<!-- a pooling based JMS provider -->
+	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory">
+			<bean class="org.apache.activemq.ActiveMQSslConnectionFactory">
+				<property name="brokerURL">
+					<value>${broker.url}</value>
+				</property>
+				<property name="keyStore" value="broker.ks" />
+				<property name="keyStorePassword" value="123456" />
+				<property name="trustStore" value="broker.ks" />
+				<property name="trustStorePassword" value="123456" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- Spring JMS Template -->
+	<bean id="myJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref local="jmsFactory" />
+		</property>
+	</bean>
+
+
+
+</beans>

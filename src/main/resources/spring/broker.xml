@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://activemq.apache.org/schema/core 
+						http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+
+	<amq:broker brokerName="ActiveMQBroker" useJmx="false"
+		persistent="false" >
+		<amq:sslContext>
+			<amq:sslContext keyStore="classpath:broker.ks"
+				keyStorePassword="123456" trustStore="classpath:broker.ks"
+				trustStorePassword="123456" />
+		</amq:sslContext>
+		<amq:transportConnectors>
+			<amq:transportConnector uri="${broker.url}?needClientAuth=true"></amq:transportConnector>
+		</amq:transportConnectors>
+	</amq:broker>
+	
+</beans>

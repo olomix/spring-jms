@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/jms 
+						http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
+
+	<bean id="jmsServer" class="sample.Server" >
+		<property name="jmsTemplate" ref="myJmsTemplate" />
+		<property name="messagesNum" value="${server.test_messages.num}" />
+		<property name="requestDestination" ref="requestDestination"></property>
+	</bean>
+
+	<jms:listener-container connection-factory="jmsFactory"
+		concurrency="3-10" >
+		<jms:listener destination="${jms.queue.response}" 
+			ref="jmsServer" />
+	</jms:listener-container>
+</beans>
